@@ -1,0 +1,15 @@
+2020-11-05 21:08:42,229 : INFO :  * Restarting with stat
+2020-11-05 21:08:51,198 : WARNING :  * Debugger is active!
+2020-11-05 21:08:51,201 : INFO :  * Debugger PIN: 549-390-505
+2020-11-05 21:08:51,210 : INFO :  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+2020-11-05 21:09:10,362 : INFO : 127.0.0.1 - - [05/Nov/2020 21:09:10] "[37mGET / HTTP/1.1[0m" 200 -
+2020-11-05 21:09:10,550 : INFO : 127.0.0.1 - - [05/Nov/2020 21:09:10] "[36mGET /vendor/bootstrap/css/bootstrap.css HTTP/1.1[0m" 304 -
+2020-11-05 21:09:10,765 : INFO : 127.0.0.1 - - [05/Nov/2020 21:09:10] "[36mGET /medius/css/medius-style.css HTTP/1.1[0m" 304 -
+2020-11-05 21:09:10,858 : INFO : 127.0.0.1 - - [05/Nov/2020 21:09:10] "[36mGET /vendor/fontawesome-free/css/all.min.css HTTP/1.1[0m" 304 -
+2020-11-05 21:09:10,863 : INFO : 127.0.0.1 - - [05/Nov/2020 21:09:10] "[36mGET /vendor/foundation-icons/foundation-icons.css HTTP/1.1[0m" 304 -
+2020-11-05 21:09:11,079 : INFO : 127.0.0.1 - - [05/Nov/2020 21:09:11] "[36mGET /medius/js/chat.js HTTP/1.1[0m" 304 -
+2020-11-05 21:09:11,340 : INFO : 127.0.0.1 - - [05/Nov/2020 21:09:11] "[36mGET /vendor/jquery/jquery-3.3.1.min.js HTTP/1.1[0m" 304 -
+2020-11-05 21:09:11,705 : INFO : 127.0.0.1 - - [05/Nov/2020 21:09:11] "[36mGET /medius/images/bg.png HTTP/1.1[0m" 304 -
+2020-11-05 21:09:11,745 : INFO : 127.0.0.1 - - [05/Nov/2020 21:09:11] "[36mGET /medius/images/chat-bg.png HTTP/1.1[0m" 304 -
+2020-11-05 21:09:11,753 : INFO : 127.0.0.1 - - [05/Nov/2020 21:09:11] "[36mGET /vendor/foundation-icons/foundation-icons.woff HTTP/1.1[0m" 304 -
+2020-11-05 21:09:13,729 : INFO : 127.0.0.1 - - [05/Nov/2020 21:09:13] "[37mGET /chat?message=Hi HTTP/1.1[0m" 200 -

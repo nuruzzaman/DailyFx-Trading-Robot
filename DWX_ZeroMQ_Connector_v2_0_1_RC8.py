@@ -41,7 +41,7 @@ class DWX_ZeroMQ_Connector():
                  _poll_timeout=1000,        # ZMQ Poller Timeout (ms)
                  _sleep_delay=0.001,        # 1 ms for time.sleep()
                  _monitor=False):           # Experimental ZeroMQ Socket Monitoring
-    
+
         ######################################################################
         
         # Strategy Status (if this is False, ZeroMQ will not listen for data)
@@ -372,10 +372,10 @@ class DWX_ZeroMQ_Connector():
     def _generate_default_order_dict(self):
         return({'_action': 'OPEN',
                   '_type': 0,
-                  '_symbol': 'EURUSD',
+                  '_symbol': 'USDJPY',
                   '_price': 0.0,
                   '_SL': 500, # SL/TP in POINTS, not pips.
-                  '_TP': 500,
+                  '_TP': 100,
                   '_comment': self._ClientID,
                   '_lots': 0.01,
                   '_magic': 123456,
@@ -443,7 +443,7 @@ class DWX_ZeroMQ_Connector():
     Function to construct messages for sending Trade commands to MetaTrader
     """
     def _DWX_MTX_SEND_COMMAND_(self, _action='OPEN', _type=0,
-                                 _symbol='EURUSD', _price=0.0,
+                                 _symbol='USDJPY', _price=0.0,
                                  _SL=50, _TP=50, _comment="Python-to-MT",
                                  _lots=0.01, _magic=123456, _ticket=0):
         

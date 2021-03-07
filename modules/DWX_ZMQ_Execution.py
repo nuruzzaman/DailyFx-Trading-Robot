@@ -19,9 +19,7 @@ class DWX_ZMQ_Execution():
     
     def __init__(self, _zmq):
         self._zmq = _zmq
-    
-    ##########################################################################
-    
+
     def _execute_(self, 
                   _exec_dict,
                   _verbose=False, 
@@ -67,6 +65,3 @@ class DWX_ZMQ_Execution():
                 
         # Default
         return None
-    
-    ##########################################################################
-    

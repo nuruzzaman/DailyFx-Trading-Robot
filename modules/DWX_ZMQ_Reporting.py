@@ -15,13 +15,12 @@
 from pandas import DataFrame, to_datetime
 from time import sleep
 
+
 class DWX_ZMQ_Reporting():
     
     def __init__(self, _zmq):
         self._zmq = _zmq
-        
-    ##########################################################################
-    
+
     def _get_open_trades_(self, _trader='Trader_SYMBOL', 
                           _delay=0.1, _wbreak=10):
         
@@ -56,6 +55,3 @@ class DWX_ZMQ_Reporting():
             
         # Default
         return DataFrame()
-    
-    ##########################################################################
-    

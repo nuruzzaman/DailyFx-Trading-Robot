@@ -1,2 +1,4 @@
 zmq
 pandas
+bs4
+numpy
