@@ -17,5 +17,5 @@ We have installed ZeroMQ with python >3.6 in the Windows 10 environment. The fol
 9. Open your command prompt and change the folder directory to “dwx-zeromq-connector-master/v2.0.1 / python / api /” folder and type “ipython” 
 10. Type “from DWX_ZeroMQ_Connector_v2_0_1_RC8 import DWX_ZeroMQ_Connector” command.
 11. Type “_zmq = DWX_ZeroMQ_Connector()”
-
+12. _zmq._DWX_MTX_GET_ALL_OPEN_TRADES_()
 

@@ -367,7 +367,10 @@ class DWX_ZeroMQ_Connector():
             
         except KeyError:
             pass
-    
+
+    def _DWX_MTX_GET_ALL_RATES_TRADES_(self):
+        self.remote_send(self._PUSH_SOCKET, "RATES;")
+
     # DEFAULT ORDER DICT
     def _generate_default_order_dict(self):
         return({'_action': 'OPEN',

@@ -375,7 +375,7 @@ void InterpretZmqMessage(Socket &pSocket, string &compArray[]) {
    /* 02-08-2019 10:41 CEST - HEARTBEAT */
    if(compArray[0] == "HEARTBEAT")
       InformPullClient(pSocket, "{'_action': 'heartbeat', '_response': 'loud and clear!'}");
-      
+     
    /* Process Messages */
    if(compArray[0] == "TRADE" && compArray[1] == "OPEN")
       switch_action = 1;
@@ -397,7 +397,9 @@ void InterpretZmqMessage(Socket &pSocket, string &compArray[]) {
       switch_action = 9;
    if(compArray[0] == "TRACK_RATES")
       switch_action = 10;
-   
+   if(compArray[0] == "RATES")
+      switch_action = 11;
+      
    // IMPORTANT: when adding new functions, also increase the max switch_action in CheckOpsStatus()!
    
    /* Setup processing variables */
@@ -405,7 +407,7 @@ void InterpretZmqMessage(Socket &pSocket, string &compArray[]) {
    string ret = "";
    int ticket = -1;
    bool ans = false;
-   
+         
    /****************************
     * PERFORM SOME CHECKS HERE *
     ****************************/
@@ -517,7 +519,12 @@ void InterpretZmqMessage(Socket &pSocket, string &compArray[]) {
             InformPullClient(pSocket, zmq_ret + "}");
             
             break;
-        
+            
+         case 11:
+            InformPullClient(pSocket, "{'_action': 'rates', '_response': 'Hi Bayas! You got it bro. see MT4 MetaEditor line 530'}");
+            
+            break;
+            
          // if a case is added, also change max switch_action in CheckOpsStatus()!
             
          default: 
