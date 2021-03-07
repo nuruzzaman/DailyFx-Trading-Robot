@@ -14,11 +14,11 @@ def zeromq_mt4_ea_client():
     
     # Create REQ Socket
     reqSocket = context.socket(zmq.REQ)
-    reqSocket.connect("tcp://localhost:5555")
+    reqSocket.connect("tcp://localhost:32768")
     
     # Create PULL Socket
     pullSocket = context.socket(zmq.PULL)
-    pullSocket.connect("tcp://localhost:5556")
+    pullSocket.connect("tcp://localhost:32769")
     
     # Send RATES command to ZeroMQ MT4 EA
     remote_send(reqSocket, get_rates)
