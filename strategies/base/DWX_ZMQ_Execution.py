@@ -15,6 +15,7 @@
 from pandas import to_datetime
 from time import sleep
 
+
 class DWX_ZMQ_Execution():
     
     def __init__(self, _zmq):

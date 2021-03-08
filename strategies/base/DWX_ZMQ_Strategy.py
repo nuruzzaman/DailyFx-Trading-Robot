@@ -14,22 +14,15 @@
 """
 
 from DWX_ZeroMQ_Connector_v2_0_1_RC8 import DWX_ZeroMQ_Connector
-from modules.DWX_ZMQ_Execution import DWX_ZMQ_Execution
-from modules.DWX_ZMQ_Reporting import DWX_ZMQ_Reporting
+from strategies.base.DWX_ZMQ_Execution import DWX_ZMQ_Execution
+from strategies.base.DWX_ZMQ_Reporting import DWX_ZMQ_Reporting
 
 
 class DWX_ZMQ_Strategy(object):
     
     def __init__(self, _name="DEFAULT_STRATEGY",    # Name 
                  _symbols=[('EURUSD',0.01),     # List of (Symbol,Lotsize) tuples
-                           ('AUDNZD',0.01),
-                           ('NDX',0.10),
-                           ('UK100',0.1),
-                           ('GDAXI',0.01),
-                           ('XTIUSD',0.01),
-                           ('SPX500',1.0),
-                           ('STOXX50E',0.10),
-                           ('XAUUSD',0.01)],
+                           ('USDJPY',0.01)],
                  _broker_gmt=3,                 # Darwinex GMT offset
                  _pulldata_handlers = [],       # Handlers to process data received through PULL port.
                  _subdata_handlers = [],        # Handlers to process data received through SUB port.

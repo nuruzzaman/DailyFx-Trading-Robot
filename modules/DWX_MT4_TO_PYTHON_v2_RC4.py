@@ -54,7 +54,7 @@ class DWX_MT_TO_PYTHON():
 
     def __init__(self, _verbose=False,
                  _type='normal',
-                 _filename='C:\\workspace-forex\\DailyFx-Trading-Robot\\result\\test.csv'):
+                 _filename='C:\workspace-FX\DailyFx-Trading-Robot\result\\test.csv'):
         
         #############################
         # MetaTrader HTML Variables #
@@ -117,7 +117,7 @@ class DWX_MT_TO_PYTHON():
     ##########################################################################
     
     def _statement_to_dataframe_(self, _type='normal',
-                                 _filename='C:\\workspace-forex\\DailyFx-Trading-Robot\\result\\test.csv'):
+                                 _filename='C:\workspace-FX\DailyFx-Trading-Robot\result\\test.csv'):
      
         # Check if input type is correct, else return error
         if _type not in ['backtest','normal','detailed']:
@@ -245,8 +245,3 @@ class DWX_MT_TO_PYTHON():
         # Return sanitized dataframe
         if self._verbose == True:
             return _df
-    
-    ##########################################################################
-if __name__ == '__main__':
-    main = DWX_MT_TO_PYTHON()
-    main._statement_to_dataframe_()
