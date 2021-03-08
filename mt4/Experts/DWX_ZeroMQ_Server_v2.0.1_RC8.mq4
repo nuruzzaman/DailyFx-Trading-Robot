@@ -397,17 +397,22 @@ void InterpretZmqMessage(Socket &pSocket, string &compArray[]) {
       switch_action = 9;
    if(compArray[0] == "TRACK_RATES")
       switch_action = 10;
-   if(compArray[0] == "RATES")
+   if(compArray[0] == "HIST" && compArray[1] == "TRADING_HISTORY")
       switch_action = 11;
-      
+   if(compArray[0] == "ACCOUNT" && compArray[1] == "ACCOUNT_DETAIL")
+      switch_action = 12;
    // IMPORTANT: when adding new functions, also increase the max switch_action in CheckOpsStatus()!
+   
+   
    
    /* Setup processing variables */
    string zmq_ret = "";
    string ret = "";
    int ticket = -1;
    bool ans = false;
-         
+   string my_message = ""; 
+   string account_info = "";
+   
    /****************************
     * PERFORM SOME CHECKS HERE *
     ****************************/
@@ -480,7 +485,7 @@ void InterpretZmqMessage(Socket &pSocket, string &compArray[]) {
             
             break;
             
-         case 7: // GET OPEN ORDERS
+         case 7: // GET ALL OPENNING ORDERS
       
             zmq_ret = "{";
             
@@ -520,13 +525,20 @@ void InterpretZmqMessage(Socket &pSocket, string &compArray[]) {
             
             break;
             
-         case 11:
-            InformPullClient(pSocket, "{'_action': 'rates', '_response': 'Hi Bayas! You got it bro. see MT4 MetaEditor line 530'}");
+         case 11: // Retrieve all open pending and market orders
+            zmq_ret = "{";
+            DWX_GetTradingHistory(zmq_ret);
             
+            InformPullClient(pSocket, zmq_ret + "}");
             break;
             
-         // if a case is added, also change max switch_action in CheckOpsStatus()!
+         case 12: // Retrieve Account detail
+            zmq_ret = "{";
+            DWX_GetAccountHistory(zmq_ret);
             
+            InformPullClient(pSocket, zmq_ret + "}"); 
+            break; 
+         // if a case is added, also change max switch_action in CheckOpsStatus()  
          default: 
             break;
       }
@@ -596,6 +608,63 @@ string GetBidAsk(string symbol) {
    
    // Default
    return "";
+}
+
+// GET ALL TRADING HISTORY 
+//+------------------------------------------------------------------+
+void DWX_GetTradingHistory(string &zmq_ret) {
+
+   int total_orders = OrdersHistoryTotal();
+   
+   zmq_ret = zmq_ret + "'_action': 'TRADING_ACCOUNT_HISTORY'";
+   zmq_ret = zmq_ret + ", '_closed_orders': {";
+   
+   for(int i=0; i<total_orders; i++) {
+      
+      if (OrderSelect(i,SELECT_BY_POS, MODE_HISTORY)==false) {
+         break; 
+      }
+      
+      zmq_ret = zmq_ret + IntegerToString(OrderTicket()) + ": {";
+      zmq_ret = zmq_ret + "'_magic': " + IntegerToString(OrderMagicNumber()) + 
+      ", '_symbol': '" + OrderSymbol() + 
+      "','_lots': " + DoubleToString(OrderLots()) + 
+      ", '_type': " + IntegerToString(OrderType()) + 
+      ", '_open_price': " + DoubleToString(OrderOpenPrice()) + 
+      ", '_open_time': '" + TimeToStr(OrderOpenTime(),TIME_DATE|TIME_SECONDS) + 
+      "','_SL': " + DoubleToString(OrderStopLoss()) + 
+      ", '_TP': " + DoubleToString(OrderTakeProfit()) + 
+      ", '_commission': " + DoubleToString(OrderCommission()) + 
+      ", '_profit_loss': " + DoubleToString(OrderProfit()) + 
+      ", '_swap': " + DoubleToString(OrderSwap()) + 
+      ", '_comment': '" + OrderComment() + 
+      "'";
+      
+      if (i != total_orders)
+         zmq_ret = zmq_ret + "}, ";
+      else
+         zmq_ret = zmq_ret + "}";
+            
+   }
+   zmq_ret = zmq_ret + "}";
+}
+
+
+// GET ACCOUNT HISTORY 
+//+------------------------------------------------------------------+
+void DWX_GetAccountHistory(string &zmq_ret) {
+
+   zmq_ret = zmq_ret + "'_action': 'ACCOUNT_DETAIL'";
+   zmq_ret = zmq_ret + ", '_detail': {";
+   zmq_ret = zmq_ret + "'_account_balance': " + DoubleToString(AccountInfoDouble(ACCOUNT_BALANCE),2) + ",";
+   zmq_ret = zmq_ret + "'_account_profit': " + DoubleToString(AccountInfoDouble(ACCOUNT_PROFIT),2) + ",";
+   zmq_ret = zmq_ret + "'_account_equity': " + DoubleToString(AccountInfoDouble(ACCOUNT_EQUITY),2) + ",";
+   zmq_ret = zmq_ret + "'_account_margin': " + DoubleToString(AccountInfoDouble(ACCOUNT_MARGIN),2) + ",";
+   zmq_ret = zmq_ret + "'_account_margin_free': " + DoubleToString(AccountInfoDouble(ACCOUNT_MARGIN_FREE),2) + ",";
+   zmq_ret = zmq_ret + "'_account_margin_level': " + DoubleToString(AccountInfoDouble(ACCOUNT_MARGIN_LEVEL),2) + ",";
+   zmq_ret = zmq_ret + "'_account_margin_call': " + DoubleToString(AccountInfoDouble(ACCOUNT_MARGIN_SO_CALL),2) + ",";
+   zmq_ret = zmq_ret + "'_account_margin_stopout': " + DoubleToString(AccountInfoDouble(ACCOUNT_MARGIN_SO_SO),2) + "";
+   zmq_ret = zmq_ret + "}";
 }
 
 //+------------------------------------------------------------------+
@@ -762,6 +831,7 @@ void InformPullClient(Socket& pSocket, string message) {
    pSocket.send(pushReply,true); // NON-BLOCKING
    
 }
+
 
 //+------------------------------------------------------------------+
 
@@ -1089,7 +1159,7 @@ void DWX_CloseAllOrders(string &zmq_ret) {
 }
 
 //+------------------------------------------------------------------+
-// GET OPEN ORDERS
+// GET ALL OPENNING ORDERS
 void DWX_GetOpenOrders(string &zmq_ret) {
 
    bool found = false;
@@ -1104,7 +1174,19 @@ void DWX_GetOpenOrders(string &zmq_ret) {
       
          zmq_ret = zmq_ret + IntegerToString(OrderTicket()) + ": {";
          
-         zmq_ret = zmq_ret + "'_magic': " + IntegerToString(OrderMagicNumber()) + ", '_symbol': '" + OrderSymbol() + "', '_lots': " + DoubleToString(OrderLots()) + ", '_type': " + IntegerToString(OrderType()) + ", '_open_price': " + DoubleToString(OrderOpenPrice()) + ", '_open_time': '" + TimeToStr(OrderOpenTime(),TIME_DATE|TIME_SECONDS) + "', '_SL': " + DoubleToString(OrderStopLoss()) + ", '_TP': " + DoubleToString(OrderTakeProfit()) + ", '_pnl': " + DoubleToString(OrderProfit()) + ", '_comment': '" + OrderComment() + "'";
+         zmq_ret = zmq_ret + "'_magic': " + IntegerToString(OrderMagicNumber()) + 
+         ", '_symbol': '" + OrderSymbol() + 
+         "', '_lots': " + DoubleToString(OrderLots()) + 
+         ", '_type': " + IntegerToString(OrderType()) + 
+         ", '_open_price': " + DoubleToString(OrderOpenPrice()) + 
+         ", '_open_time': '" + TimeToStr(OrderOpenTime(),TIME_DATE|TIME_SECONDS) + 
+         "', '_SL': " + DoubleToString(OrderStopLoss()) + 
+         ", '_TP': " + DoubleToString(OrderTakeProfit()) + 
+         ", '_commission': " + DoubleToString(OrderCommission()) + 
+         ", '_profit_loss': " + DoubleToString(OrderProfit()) + 
+         ", '_swap': " + DoubleToString(OrderSwap()) + 
+         ", '_comment': '" + OrderComment() + 
+         "'";
          
          if (i != 0)
             zmq_ret = zmq_ret + "}, ";

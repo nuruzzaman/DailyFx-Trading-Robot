@@ -349,13 +349,10 @@ class DWX_ZeroMQ_Connector():
 
     # CLOSE ALL TRADES
     def _DWX_MTX_CLOSE_ALL_TRADES_(self):
-
         try:
             self.temp_order_dict['_action'] = 'CLOSE_ALL'
-
             # Execute
             self._DWX_MTX_SEND_COMMAND_(**self.temp_order_dict)
-
         except KeyError:
             pass
 
@@ -368,17 +365,20 @@ class DWX_ZeroMQ_Connector():
         except KeyError:
             pass
 
+    # https://blog.darwinex.com/zeromq-transaction-reporting-metatrader-zmq3/
     def _DWX_MTX_GET_ALL_TRADING_HISTORY_(self):
         try:
             self.temp_order_dict['_action'] = 'TRADING_HISTORY'
+            self.temp_order_dict['_execution_type'] = 'HIST'
             # Execute
             self._DWX_MTX_SEND_COMMAND_(**self.temp_order_dict)
         except KeyError:
             pass
 
+    # https://blog.darwinex.com/zeromq-transaction-reporting-metatrader-zmq3/
     def _DWX_MTX_GET_ACCOUNT_HISTORY_(self):
         try:
-            self.temp_order_dict['_action'] = 'ACCOUNT_HISTORY'
+            self.temp_order_dict['_action'] = 'ACCOUNT_DETAIL'
             self.temp_order_dict['_execution_type'] = 'ACCOUNT'
             # Execute
             self._DWX_MTX_SEND_COMMAND_(**self.temp_order_dict)
